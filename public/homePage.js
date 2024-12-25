@@ -75,35 +75,30 @@ moneyManager.sendMoneyCallback = (data) => {
 
 const favoritesWidget = new FavoritesWidget();
 
-const getFavorites = () => {
-    ApiConnector.getFavorites(response => {
-        if(response.success) {
-            favoritesWidget.clearTable();
-            favoritesWidget.fillTable(response.data);
-            moneyManager.updateUsersList(response.data);
-        }
-    });
-};
+ApiConnector.getFavorites(response => {
+    if(response.success) {
+        favoritesWidget.clearTable();
+        favoritesWidget.fillTable(response.data);
+        moneyManager.updateUsersList(response.data);
+    }
+});
 
 favoritesWidget.addUserCallback = (data) => {
     ApiConnector.addUserToFavorites(data, response => {
         if(response.success) {
-            getFavorites();
             favoritesWidget.setMessage(response.success, 'Пользователь добавлен в избранное!');
-        }
-        else {
+        } else {
             favoritesWidget.setMessage(response.success, response.error);
         }
     });
 };
 
 favoritesWidget.removeUserCallback = (data) => {
- ApiConnector.removeUserFromFavorites(data, response => {
-    if(response.success) { 
-        getFavorites();
-        favoritesWidget.setMessage(response.success, 'Пользователь удален из избранного!');
-    } else {
-    favoritesWidget.setMessage(response.success, response.error);
-    }
-  });
+    ApiConnector.removeUserFromFavorites(data, response => {
+        if(response.success) { 
+            favoritesWidget.setMessage(response.success, 'Пользователь удален из избранного!');
+        } else {
+            favoritesWidget.setMessage(response.success, response.error);
+        }
+    });
 };
